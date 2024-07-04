@@ -9,6 +9,7 @@ const auth = require("./middlewares/auth");
 const dataRouter = require("./routes/dataRoute");
 const fs = require("fs");
 const path = require("path");
+const cors = require("cors");
 let updateLogStream = fs.createWriteStream(
   path.join(__dirname, "./logs/logs.txt"),
   { flags: "a" }
@@ -18,6 +19,7 @@ const port = process.env.PORT;
 const db_url = process.env.DB_URL;
 
 app.use(express.json());
+app.use(cors({ origin: ["http:localhost:5173"] }));
 app.use("/user", userRouter);
 app.use(
   "/data",
