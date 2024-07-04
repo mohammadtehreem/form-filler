@@ -34,6 +34,15 @@ app.use(
   }),
   dataRouter
 );
+
+app.get("/", (req, res) => {
+  try {
+    res.status.send("This is the home route");
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+});
 app.listen(port, () => {
   try {
     connectToDB(db_url);
