@@ -19,7 +19,7 @@ const port = process.env.PORT;
 const db_url = process.env.DB_URL;
 
 app.use(express.json());
-app.use(cors({ origin: ["http:localhost:5173"] }));
+app.use(cors({ origin: ["http://localhost:5173"] }));
 app.use("/user", userRouter);
 app.use(
   "/data",
