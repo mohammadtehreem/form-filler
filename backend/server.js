@@ -37,10 +37,10 @@ app.use(
 
 app.get("/", (req, res) => {
   try {
-    res.status.send("This is the home route");
+    res.status(200).send("This is the home route");
   } catch (error) {
     console.log(error);
-    res.status(500);
+    res.sendStatus(500);
   }
 });
 app.listen(port, () => {
