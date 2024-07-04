@@ -24,6 +24,8 @@ export const Navbar = () => {
           justify="space-between"
           wrap="wrap"
           padding="1.5rem"
+          bg="teal.500"
+          color="white"
         >
           <Box>
             <Link
@@ -31,7 +33,7 @@ export const Navbar = () => {
               to="/"
               fontSize="lg"
               fontWeight="bold"
-              color="teal.500"
+              color="white"
             >
               Home
             </Link>
@@ -46,14 +48,14 @@ export const Navbar = () => {
               marginRight="1.5rem"
               fontSize="lg"
               fontWeight="bold"
-              color="teal.500"
+              color="white"
             >
               Login
             </Link>
             <Button
               as={RouterLink}
               to="/register"
-              colorScheme="teal"
+              colorScheme="purple"
               variant="solid"
               size="md"
             >

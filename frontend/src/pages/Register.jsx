@@ -38,21 +38,10 @@ export const Register = () => {
     });
   };
 
-  const usernameToast = () => {
+  const failToast = () => {
     toast({
       title: "Try to Login!",
-      description:
-        "Username already in use, try to login or choose a different username.",
-      status: "success",
-      duration: 4000,
-      isClosable: true,
-    });
-  };
-  const emailToast = () => {
-    toast({
-      title: "Try to Login!",
-      description:
-        "Email already in use, try to login or use a different email.",
+      description: "Failed to register, please try again!",
       status: "error",
       duration: 4000,
       isClosable: true,
@@ -71,20 +60,22 @@ export const Register = () => {
     setPassword(e.target.value);
   };
   const handleSubmit = async () => {
-    if (!password || !email || !username) {
-      validationToast();
-    }
-    const res = await axios.post(`${BASEURL}/user/register`, {
-      email,
-      username,
-      password,
-    });
-    if (res.status === 201) {
-      registeredToast();
-    } else if (res.status === 408) {
-      emailToast();
-    } else if (res.status === 409) {
-      usernameToast();
+    try {
+      if (!password || !email || !username) {
+        validationToast();
+        return;
+      }
+      const res = await axios.post(`${BASEURL}/user/register`, {
+        email,
+        username,
+        password,
+      });
+      console.log(res);
+      if (res.status === 201) {
+        registeredToast();
+      }
+    } catch (error) {
+      failToast();
     }
   };
   return (
