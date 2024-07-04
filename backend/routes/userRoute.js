@@ -16,11 +16,11 @@ userRouter.post("/register", async (req, res) => {
     }
     const emailExists = await userModel.findOne({ email: email });
     if (emailExists) {
-      return res.status(400).send("Email already in use!");
+      return res.status(408).send("Email already in use!");
     }
     const usernameExists = await userModel.findOne({ username: username });
     if (usernameExists) {
-      return res.status(400).send("Username unavailable!");
+      return res.status(409).send("Username unavailable!");
     }
     //password hashing
 
