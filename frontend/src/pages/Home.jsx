@@ -8,14 +8,39 @@ import {
   Td,
   TableCaption,
   TableContainer,
+  Button,
+  useToast,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { DataForm } from "../components/DataForm";
 const BASEURL = "https://form-filler-gjkj.onrender.com";
 const jwtToken = JSON.parse(localStorage.getItem("jwtToken"));
 
 export const Home = () => {
+  const [data, setData] = useState([]);
+  const toast = useToast();
+
+  const deletedToast = () => {
+    toast({
+      title: "Success!",
+      description: "Data deleted successfully!",
+      status: "success",
+      duration: 4000,
+      isClosable: true,
+    });
+  };
+
+  const failedDeleteToast = () => {
+    toast({
+      title: "Fail!",
+      description: "Couldn't delete data, please try again",
+      status: "error",
+      duration: 4000,
+      isClosable: true,
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios.get(`${BASEURL}/data`, {
@@ -23,15 +48,30 @@ export const Home = () => {
           Authorization: `Bearer ${jwtToken}`,
         },
       });
-      console.log(res);
+      setData(res.data);
     };
     fetchData();
   }, []);
+
+  //deletion
+  const handleDelete = async (id) => {
+    try {
+      const res = await axios.delete(`${BASEURL}/data/${id}`, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+      deletedToast();
+      console.log(res);
+    } catch (error) {
+      failedDeleteToast();
+    }
+  };
   return (
     <div>
       <TableContainer>
-        <Table variant="simple">
-          <TableCaption>Imperial to metric conversion factors</TableCaption>
+        <Table variant="striped" colorScheme="teal">
+          <TableCaption>Fill in the form below to post data</TableCaption>
           <Thead>
             <Tr>
               <Th isNumeric>ID</Th>
@@ -43,32 +83,34 @@ export const Home = () => {
               <Th>Action Number</Th>
               <Th>Action Name</Th>
               <Th>Status</Th>
+              <Th>Impact</Th>
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>inches</Td>
-              <Td>millimetres (mm)</Td>
-              <Td isNumeric>25.4</Td>
-            </Tr>
-            <Tr>
-              <Td>feet</Td>
-              <Td>centimetres (cm)</Td>
-              <Td isNumeric>30.48</Td>
-            </Tr>
-            <Tr>
-              <Td>yards</Td>
-              <Td>metres (m)</Td>
-              <Td isNumeric>0.91444</Td>
-            </Tr>
+            {data.map((elem) => {
+              return (
+                <Tr key={elem._id}>
+                  <Td>{elem._id}</Td>
+                  <Td>{elem.quantity}</Td>
+                  <Td>{elem.amount}</Td>
+                  <Td>{elem.postingYear}</Td>
+                  <Td>{elem.postingMonth}</Td>
+                  <Td>{elem.actionType}</Td>
+                  <Td>{elem.actionNumber}</Td>
+                  <Td>{elem.actionName}</Td>
+                  <Td>{elem.status}</Td>
+                  <Td>{elem.impact}</Td>
+                  <Button colorScheme="blue">Edit</Button>
+                  <Button
+                    colorScheme="red"
+                    onClick={() => handleDelete(elem._id)}
+                  >
+                    Delete
+                  </Button>
+                </Tr>
+              );
+            })}
           </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th>To convert</Th>
-              <Th>into</Th>
-              <Th isNumeric>multiply by</Th>
-            </Tr>
-          </Tfoot>
         </Table>
       </TableContainer>
       <DataForm />
