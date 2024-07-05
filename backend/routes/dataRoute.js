@@ -78,7 +78,7 @@ dataRouter.delete("/:id", role(["admin"]), async (req, res) => {
     } else res.sendStatus(500);
   } catch (err) {
     console.log(err);
-    res.status(500);
+    res.status(502);
   }
 });
 
