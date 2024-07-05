@@ -70,12 +70,10 @@ dataRouter.patch("/:id", role(["admin", "user"]), async (req, res) => {
 dataRouter.delete("/:id", role(["admin"]), async (req, res) => {
   try {
     const id = req.params.id;
-    if (req.body.status) {
-      const data = await dataModel.deleteOne({ _id: id });
-      if (data.acknowledged && data.deletedCount == 1)
-        res.status(200).json({ message: "Deleted Successfully" });
-      else res.sendStatus(204);
-    } else res.sendStatus(500);
+    const data = await dataModel.deleteOne({ _id: id });
+    if (data.acknowledged && data.deletedCount == 1)
+      res.status(200).json({ message: "Deleted Successfully" });
+    else res.sendStatus(204);
   } catch (err) {
     console.log(err);
     res.status(502);
