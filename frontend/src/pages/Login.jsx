@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BASEURL = "https://form-filler-gjkj.onrender.com";
 
@@ -54,6 +55,9 @@ export const Login = () => {
   const handlePassword = (e) => {
     setPassword(e.target.value);
   };
+
+  const navigate = useNavigate();
+
   const handleSubmit = async () => {
     try {
       if (!email || !password) {
@@ -67,6 +71,7 @@ export const Login = () => {
       loginToast();
       localStorage.setItem("jwtToken", JSON.stringify(res.data.accessToken));
       console.log(res.data.accessToken);
+      navigate("/");
     } catch (error) {
       failToast();
     }
